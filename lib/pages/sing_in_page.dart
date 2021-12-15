@@ -27,28 +27,30 @@ class _SignInPageState extends State<SignInPage> {
   Widget build(BuildContext context) {
     Size AllSize = MediaQuery.of(context).size;
     return Scaffold(
-      body: Container(
-        height: AllSize.height,
-        width: AllSize.width,
-        padding: EdgeInsets.symmetric(horizontal: 20.0),
-        child: Center(
-          child: Stack(
-            children: [
-              isloading ? Center(child: CircularProgressIndicator(),) : SizedBox.shrink(),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text_field_widget().build("Email", control1),
-                  Text_field_widget().build("Password", control2, true),
-                  Button_Builder().build("Sign In", (){
-                    _isloading_chacker();
-                    _DoSignin();
-                  }),
-                  SizedBox(height: 20.0),
-                  Text_Builder().build("Don't have an account?", "Sign Up", () => _OpenPage())
-                ],
-              ),
-            ],
+      body: SingleChildScrollView(
+        child: Container(
+          height: AllSize.height,
+          width: AllSize.width,
+          padding: EdgeInsets.symmetric(horizontal: 20.0),
+          child: Center(
+            child: Stack(
+              children: [
+                isloading ? Center(child: CircularProgressIndicator(),) : SizedBox.shrink(),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text_field_widget().build("Email", control1),
+                    Text_field_widget().build("Password", control2, true),
+                    Button_Builder().build("Sign In", (){
+                      _isloading_chacker();
+                      _DoSignin();
+                    }),
+                    SizedBox(height: 20.0),
+                    Text_Builder().build("Don't have an account?", "Sign Up", () => _OpenPage())
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -80,7 +82,9 @@ class _SignInPageState extends State<SignInPage> {
       _isloading_chacker();
       Navigator.pushReplacementNamed(context, Home().id);
     }else{
-       _isloading_chacker();
+      setState(() {
+        isloading = false;
+      });
       Toast_widget.build("Email or Password incorrect", context);
     }
     

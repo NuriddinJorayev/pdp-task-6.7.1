@@ -29,29 +29,31 @@ class _SignUpPageState extends State<SignUpPage> {
   Widget build(BuildContext context) {
     Size AllSize = MediaQuery.of(context).size;
     return Scaffold(
-      body: Container(
-        height: AllSize.height,
-        width: AllSize.width,
-        padding: EdgeInsets.symmetric(horizontal: 20.0),
-        child: Center(
-          child: Stack(
-            children: [
-              isloading ? Center(child: CircularProgressIndicator(),) : SizedBox.shrink(),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text_field_widget().build("Fullname", control1),
-                  Text_field_widget().build("Email", control2),
-                  Text_field_widget().build("Password", control3, true),
-                  Button_Builder().build("Sign Up", () => {
-                    _isloading_chacker(),
-                    _DoSignup()
-                  }),
-                  SizedBox(height: 20.0),
-                  Text_Builder().build("Already have an account?", "Sign in", () => _OpenPage())
-                ],
-              ),
-            ],
+      body: SingleChildScrollView(
+        child: Container(
+          height: AllSize.height,
+          width: AllSize.width,
+          padding: EdgeInsets.symmetric(horizontal: 20.0),
+          child: Center(
+            child: Stack(
+              children: [
+                isloading ? Center(child: CircularProgressIndicator(),) : SizedBox.shrink(),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text_field_widget().build("Fullname", control1),
+                    Text_field_widget().build("Email", control2),
+                    Text_field_widget().build("Password", control3, true),
+                    Button_Builder().build("Sign Up", () => {
+                      _isloading_chacker(),
+                      _DoSignup()
+                    }),
+                    SizedBox(height: 20.0),
+                    Text_Builder().build("Already have an account?", "Sign in", () => _OpenPage())
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -82,7 +84,9 @@ class _SignUpPageState extends State<SignUpPage> {
       _isloading_chacker();
       Navigator.pushReplacementNamed(context, Home().id);
     }else{
-      _isloading_chacker();
+      setState(() {
+        isloading = false;
+      });
       Toast_widget.build("Chack your Email or password", context);
     }
   }
