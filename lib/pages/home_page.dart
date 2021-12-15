@@ -46,8 +46,6 @@ class _HomeState extends State<Home> {
   _logOut(bool exist){
    if(exist){
       AuthService.Loguot(context);
-    Prefs.DeleteUserId();
-    Navigator.pushReplacementNamed(context, SignInPage().id);
    }
     
   }
