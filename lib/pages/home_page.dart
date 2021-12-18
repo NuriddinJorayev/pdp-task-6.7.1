@@ -46,7 +46,7 @@ class _HomeState extends State<Home> {
       body: FutureBuilder<List<Post>>(
         future: futureList,
         builder: (context, snapshot) {
-          if (snapshot.hasData) {
+          if (snapshot.hasData && snapshot.data!.length != 0) {
             return ListView.builder(
               itemCount: snapshot.data!.length,
               itemBuilder: (context, int index) {
@@ -58,7 +58,10 @@ class _HomeState extends State<Home> {
                     index);
               },
             );
-          } else
+          }else if (snapshot.hasData && snapshot.data!.length == 0){
+            return Center(child: Text("There is no data on the server", style: TextStyle(color: Colors.orange[900], fontSize: 18),),);
+          }
+           else
             return Center(
               child: CircularProgressIndicator(),
             );
@@ -110,6 +113,9 @@ class _HomeState extends State<Home> {
           IconButton(
             onPressed: () {
               RTDB_Service.DeletePost(index);
+              setState(() {
+                
+              });
             },
             icon: Icon(Icons.delete),
           )
