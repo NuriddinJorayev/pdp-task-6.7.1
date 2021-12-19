@@ -1,4 +1,6 @@
 
+// ignore_for_file: unused_local_variable
+
 import 'package:firebase_database/firebase_database.dart';
 import 'package:herewego/models/post.dart';
 
@@ -7,7 +9,7 @@ class RTDB_Service {
 
   static Future<Stream<DatabaseEvent>> StorePost(Post post) async {
     _database.child("posts").push().set(post.ToJson());
-    return _database.onChildAdded;
+    return _database.onChildChanged;
   }
   // friend with _FromObjectToList method
   static Future<List<Post>> LoadPost() async {

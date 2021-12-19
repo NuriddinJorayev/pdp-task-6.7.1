@@ -24,7 +24,9 @@ class _SignUpPageState extends State<SignUpPage> {
   var control1 = TextEditingController();
   var control2 = TextEditingController();
   var control3 = TextEditingController();
+  IconData IconVisible = Icons.visibility_off_outlined;
   bool isloading = false;
+    bool visible = true;
   @override
   Widget build(BuildContext context) {
     Size AllSize = MediaQuery.of(context).size;
@@ -41,9 +43,9 @@ class _SignUpPageState extends State<SignUpPage> {
                 Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text_field_widget().build("Fullname", control1),
-                    Text_field_widget().build("Email", control2),
-                    Text_field_widget().build("Password", control3, true),
+                    Text_field_widget().build("Fullname", control1, SizedBox.shrink()),
+                    Text_field_widget().build("Email", control2, SizedBox.shrink()),
+                    Text_field_widget().build("Password", control3, _visible(), visible),
                     Button_Builder().build("Sign Up", () => {
                       _isloading_chacker(),
                       _DoSignup()
@@ -68,6 +70,20 @@ class _SignUpPageState extends State<SignUpPage> {
         isloading = true;
       }
     });
+  }
+
+  Widget _visible() {
+    return IconButton(onPressed: () {
+      setState(() {
+        if (visible){
+          visible = false;
+          IconVisible = Icons.visibility_outlined;
+        }else{
+          visible = true;
+          IconVisible = Icons.visibility_off_outlined;
+        }
+      });
+    }, icon: Icon(IconVisible));
   }
 
   _DoSignup(){

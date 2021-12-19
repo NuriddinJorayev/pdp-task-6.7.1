@@ -33,7 +33,7 @@ class _HomeState extends State<Home> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text("home Page"),
+        title: Text("All Posts"),
         backgroundColor: Color.fromARGB(255, 255, 87, 32),
         actions: [
           IconButton(
@@ -51,11 +51,12 @@ class _HomeState extends State<Home> {
               itemCount: snapshot.data!.length,
               itemBuilder: (context, int index) {
                 return _ListTite(
-                    snapshot.data![index].firstName,
-                    snapshot.data![index].lastName,
-                    snapshot.data![index].content,
-                    snapshot.data![index].date,
-                    index);
+                  snapshot.data![index].firstName,
+                  snapshot.data![index].lastName,
+                  snapshot.data![index].content,
+                  snapshot.data![index].date,
+                  snapshot.data![index].image,
+                  index);
               },
             );
           }else if (snapshot.hasData && snapshot.data!.length == 0){
@@ -63,7 +64,7 @@ class _HomeState extends State<Home> {
           }
            else
             return Center(
-              child: CircularProgressIndicator(),
+              child: CircularProgressIndicator(color: Colors.orange[900],),
             );
         },
       ),
@@ -84,41 +85,43 @@ class _HomeState extends State<Home> {
   }
 
   // listTitle builder method
-  Widget _ListTite(firstname, lastname, content, date, index) {
+  Widget _ListTite(firstname, lastname, content, date, image, index) {
     return Container(
+      width: MediaQuery.of(context).size.width,
       padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(lastname + ' ' + firstname,
-                  style:
-                      TextStyle(fontSize: 20.0, fontWeight: FontWeight.w500)),
-              SizedBox(height: 5.0),
-              Text(date,
-                  style: TextStyle(
-                      color: Colors.grey[700],
-                      fontSize: 18.0,
-                      fontWeight: FontWeight.w500)),
-              SizedBox(height: 5.0),
-              Text(content,
-                  style: TextStyle(
-                      color: Colors.grey[700],
-                      fontSize: 18.0,
-                      fontWeight: FontWeight.w500)),
-            ],
+          Container(
+            height: 200.0,
+            width: double.infinity,
+
+            child: image != null ? 
+            Image.network(image, fit: BoxFit.cover, loadingBuilder: (context, child, prosses){
+              return prosses == null? 
+              child : 
+              Image.asset("assets/images/loading.gif", fit: BoxFit.cover);
+            },) :
+
+            Image.asset("assets/images/ic_default2.jpg", fit: BoxFit.cover)
           ),
-          IconButton(
-            onPressed: () {
-              RTDB_Service.DeletePost(index);
-              setState(() {
-                
-              });
-            },
-            icon: Icon(Icons.delete),
-          )
+
+          SizedBox(height: 10.0),
+          Text(lastname + ' ' + firstname,
+              style:
+                  TextStyle(fontSize: 20.0, fontWeight: FontWeight.w500)),
+          SizedBox(height: 5.0),
+          Text(date,
+              style: TextStyle(
+                  color: Colors.grey[700],
+                  fontSize: 18.0,
+                  fontWeight: FontWeight.w500)),
+          SizedBox(height: 5.0),
+          Text(content,
+              style: TextStyle(
+                  color: Colors.grey[700],
+                  fontSize: 18.0,
+                  fontWeight: FontWeight.w500)),
         ],
       ),
     );
