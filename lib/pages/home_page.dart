@@ -15,21 +15,38 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  late Future<List<Post>> futureList;
+   Future<List<Post>>? futureList;
+  bool isLoad = false;
 
   @override
   void initState() {
     super.initState();
-    futureList = RTDB_Service.LoadPost().then((value) => value);
+    RTDB_Service.LoadPost().then((value) => Load(value));
     FirebaseDatabase.instance.ref().onChildChanged.listen((event) {
       setState(() {});
     });
+    FirebaseDatabase.instance.ref().onChildAdded.listen((event) {
+      setState(() {});
+    });
+    FirebaseDatabase.instance.ref().onChildRemoved.listen((event) {
+      setState(() {});
+    });
+  }
+  
+  Load(List<Post> list){   
+     setState(() {
+       if(list.isNotEmpty){
+          futureList =  RTDB_Service.LoadPost();
+       }
+     });    
   }
 
   @override
   Widget build(BuildContext context) {
     // Initialize futureList
-    futureList = RTDB_Service.LoadPost().then((value) => value);
+   setState(() {
+      futureList = RTDB_Service.LoadPost();
+   });
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,

@@ -14,19 +14,20 @@ class RTDB_Service {
   // friend with _FromObjectToList method
   static Future<List<Post>> LoadPost() async {
     List<Post> item = [];
-   return _database.ref.child("posts").get().then((value) => item = _FromObjectToList(value.value));     
+    await _database.ref.child("posts").get().then((value) => item = _FromObjectToList(value)).then((value) => value);
+   return item;   
   }
 //  friend with LoadPost method
   static List<Post> _FromObjectToList(v) {
     List<Post> item = [];
     if(v != null){
-      Map map = v as Map;
-    map.forEach((key, value) {
-      item.add(Post.fromJson(value));
-    });
-    return item;
+    DataSnapshot data = v;
+    for(var i in data.children){
+     item.add(Post.fromJson(i.value));
     }
-    return [];
+   return item;
+  } 
+  return [];
   }
 
   //  {-Mr72CKEl9HMEjyWp3cB: {date: date, firstName: nurik, lastName: lastName, userId: vwLmQH8h1ehYghuNtTlZFIflBqq2, content: content}, -Mr72diDXIvHWMPupXMu: {date: date, firstName: nurik, lastName: lastName, userId: vwLmQH8h1ehYghuNtTlZFIflBqq2, content: content}}
